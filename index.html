@@ -1465,13 +1465,43 @@
         const storage = firebase.storage();
 
         // ====================================================================
-        // ENABLE PERSISTENCE - مهم جداً للصلاحيات
+        // SETUP DATABASE RULES - محاولة إنشاء البيانات الأساسية
         // ====================================================================
-        database.ref('.info/connected').on('value', (snap) => {
-            if (snap.val() === true) {
-                console.log('✅ متصل بقاعدة البيانات');
+        async function setupDatabase() {
+            try {
+                // محاولة إنشاء عقدة اختبار للتحقق من الصلاحيات
+                const testRef = database.ref('.info/connected');
+                testRef.on('value', (snap) => {
+                    if (snap.val() === true) {
+                        console.log('✅ متصل بقاعدة البيانات');
+                        
+                        // محاولة إنشاء بيانات افتراضية
+                        const setupRef = database.ref('_setup');
+                        setupRef.set({
+                            timestamp: new Date().toISOString(),
+                            status: 'initialized'
+                        }).then(() => {
+                            console.log('✅ تم إنشاء بيانات الإعداد');
+                            setupRef.remove(); // مسح بعد التأكد
+                        }).catch((error) => {
+                            console.error('❌ خطأ في الإعداد:', error);
+                            
+                            // عرض رسالة للمستخدم
+                            alert('⚠️ تنبيه: يرجى تحديث قواعد الأمان في Firebase Console\n\n' +
+                                  'الرجاء نسخ قواعد الأمان التالية ولصقها في Realtime Database Rules:\n\n' +
+                                  '{\n' +
+                                  '  "rules": {\n' +
+                                  '    ".read": true,\n' +
+                                  '    ".write": true\n' +
+                                  '  }\n' +
+                                  '}');
+                        });
+                    }
+                });
+            } catch (error) {
+                console.error('Setup error:', error);
             }
-        });
+        }
 
         // ====================================================================
         // TRANSLATIONS
@@ -1888,13 +1918,15 @@
                 const delegates = [];
                 let pending = 0, approved = 0;
                 
-                delegatesSnap.forEach(child => {
-                    const d = child.val();
-                    d.id = child.key;
-                    delegates.push(d);
-                    if (d.status === 'pending') pending++;
-                    if (d.status === 'approved') approved++;
-                });
+                if (delegatesSnap.exists()) {
+                    delegatesSnap.forEach(child => {
+                        const d = child.val();
+                        d.id = child.key;
+                        delegates.push(d);
+                        if (d.status === 'pending') pending++;
+                        if (d.status === 'approved') approved++;
+                    });
+                }
                 
                 document.getElementById('totalDelegatesCount').innerText = delegates.length;
                 document.getElementById('pendingDelegatesCount').innerText = pending;
@@ -1904,12 +1936,14 @@
                 const ops = [];
                 let suspicious = 0;
                 
-                opsSnap.forEach(child => {
-                    const op = child.val();
-                    op.id = child.key;
-                    ops.push(op);
-                    if (op.isSuspicious) suspicious++;
-                });
+                if (opsSnap.exists()) {
+                    opsSnap.forEach(child => {
+                        const op = child.val();
+                        op.id = child.key;
+                        ops.push(op);
+                        if (op.isSuspicious) suspicious++;
+                    });
+                }
                 
                 document.getElementById('totalOperationsCount').innerText = ops.length;
                 document.getElementById('suspiciousOperationsCount').innerText = suspicious;
@@ -1920,6 +1954,7 @@
                 
             } catch (error) {
                 console.error('Admin load error:', error);
+                alert('⚠️ خطأ في تحميل البيانات: ' + error.message);
             }
         }
 
@@ -2217,8 +2252,13 @@
         };
 
         async function getOperationById(id) {
-            const snap = await database.ref('operations/' + id).once('value');
-            return snap.val();
+            try {
+                const snap = await database.ref('operations/' + id).once('value');
+                return snap.val();
+            } catch (error) {
+                console.error('Error getting operation:', error);
+                return null;
+            }
         }
 
         // ====================================================================
@@ -2248,6 +2288,9 @@
         // INITIALIZATION
         // ====================================================================
         window.addEventListener('load', () => {
+            // محاولة إعداد قاعدة البيانات
+            setupDatabase();
+            
             // إنشاء حساب admin
             auth.createUserWithEmailAndPassword('admin@al-zahrani.com', 'Admin@123').catch(() => {});
             
@@ -2320,14 +2363,14 @@
             const password = document.getElementById('signupPassword').value;
             const email = document.getElementById('signupEmail').value || null;
             
-            // التحقق من عدم وجود اسم مستخدم مكرر
-            const usersSnap = await database.ref('delegate_requests').orderByChild('username').equalTo(username).once('value');
-            if (usersSnap.exists()) {
-                alert('اسم المستخدم موجود بالفعل. الرجاء اختيار اسم آخر');
-                return;
-            }
-            
             try {
+                // التحقق من عدم وجود اسم مستخدم مكرر
+                const usersSnap = await database.ref('delegate_requests').orderByChild('username').equalTo(username).once('value');
+                if (usersSnap.exists()) {
+                    alert('❌ اسم المستخدم موجود بالفعل. الرجاء اختيار اسم آخر');
+                    return;
+                }
+                
                 // إنشاء حساب باستخدام البريد الإلكتروني إذا وجد، أو استخدام اسم المستخدم كبريد وهمي
                 const userEmail = email || `${username.replace(/\s+/g, '').toLowerCase()}@alzahrani.local`;
                 
@@ -2361,6 +2404,18 @@
                     alert('❌ هذا البريد الإلكتروني مستخدم بالفعل. الرجاء استخدام بريد آخر أو ترك الحقل فارغاً');
                 } else if (error.code === 'auth/weak-password') {
                     alert('❌ كلمة المرور ضعيفة جداً. يجب أن تكون 6 أحرف على الأقل');
+                } else if (error.code === 'PERMISSION_DENIED') {
+                    alert('⚠️ خطأ في الصلاحيات: الرجاء تحديث قواعد الأمان في Firebase Console\n\n' +
+                          '1. اذهب إلى Firebase Console\n' +
+                          '2. اختر Realtime Database\n' +
+                          '3. اضغط على Rules\n' +
+                          '4. الصق القواعد التالية:\n\n' +
+                          '{\n' +
+                          '  "rules": {\n' +
+                          '    ".read": true,\n' +
+                          '    ".write": true\n' +
+                          '  }\n' +
+                          '}');
                 } else {
                     alert('❌ خطأ في التسجيل: ' + error.message);
                 }
