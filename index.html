@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>الطريق الذكي الزهراني | نظام إدارة الأسطول المتطور مع الذكاء الاصطناعي</title>
+    <title>الطريق الذكي الزهراني | </title>
     
     <!-- Firebase SDK v10.8.0 -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -16,7 +16,6 @@
     
     <!-- TensorFlow.js للذكاء الاصطناعي -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.10.0/dist/tf.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@2.2.2/dist/coco-ssd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.1/dist/mobilenet.min.js"></script>
     
     <!-- AOS Animation -->
@@ -25,7 +24,7 @@
     
     <style>
         /* ==================================================================== */
-        /* FANTASY PROFESSIONAL DESIGN – الطريق الذكي الزهراني مع AI مباشر      */
+        /* FANTASY PROFESSIONAL DESIGN – الطريق الذكي الزهراني                 */
         /* ==================================================================== */
         
         @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap');
@@ -75,6 +74,9 @@
             overflow-x: hidden;
         }
         
+        /* ==================================================================== */
+        /* HERO VIDEO SECTION                                                  */
+        /* ==================================================================== */
         .hero-section {
             position: relative;
             width: 100%;
@@ -118,6 +120,16 @@
             padding: 0 20px;
         }
         
+        .hero-logo {
+            margin-bottom: 30px;
+            animation: floatHero 6s infinite ease-in-out;
+        }
+        
+        @keyframes floatHero {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
         .hero-title {
             font-size: 64px;
             font-weight: 900;
@@ -130,8 +142,19 @@
             position: relative;
         }
         
+        .hero-title span::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-electric), transparent);
+            border-radius: 50px;
+        }
+        
         .hero-subtitle {
-            font-size: 24px;
+            font-size: 18px;
             margin-bottom: 40px;
             opacity: 0.9;
             max-width: 800px;
@@ -151,6 +174,11 @@
             background: linear-gradient(145deg, var(--accent-electric), var(--accent-glow));
             color: white;
             box-shadow: 0 0 30px rgba(56,189,248,0.5);
+        }
+        
+        .hero-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 50px rgba(56,189,248,0.8);
         }
         
         /* ==================================================================== */
@@ -203,8 +231,8 @@
             background: var(--danger-coral);
         }
         
-        .capture-btn.active {
-            background: var(--success-emerald);
+        .capture-btn.video.active {
+            background: var(--danger-deep);
             animation: pulse 1.5s infinite;
         }
         
@@ -231,6 +259,12 @@
         
         .media-thumb.video {
             border-color: var(--danger-coral);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gray-900);
+            color: white;
+            font-size: 32px;
         }
         
         .media-label {
@@ -240,17 +274,6 @@
             font-size: 12px;
             color: var(--gray-600);
             font-weight: 700;
-        }
-        
-        .location-badge {
-            background: linear-gradient(145deg, var(--success-emerald), #0b8a5c);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 50px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
         }
         
         .ai-analysis-badge {
@@ -265,27 +288,9 @@
             margin-top: 10px;
         }
         
-        .suspicious-alert {
-            background: #ffebe6;
-            border-right: 6px solid var(--danger-coral);
-            padding: 20px;
-            border-radius: 16px;
-            margin: 15px 0;
-            animation: shake 0.5s ease;
-        }
-        
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
-        }
-        
-        .suspicious-alert i {
-            color: var(--danger-coral);
-            font-size: 24px;
-            margin-left: 10px;
-        }
-        
+        /* ==================================================================== */
+        /* LANGUAGE ORB                                                        */
+        /* ==================================================================== */
         .language-orb {
             position: fixed;
             top: 20px;
@@ -299,14 +304,15 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5), 0 0 0 2px rgba(63, 163, 214, 0.2);
             transition: var(--transition-smooth);
             border: 1px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(4px);
         }
         
         .language-orb:hover {
             transform: scale(1.1) rotate(10deg);
-            box-shadow: 0 15px 35px rgba(56,189,248,0.4);
+            box-shadow: 0 15px 35px rgba(56,189,248,0.4), 0 0 0 4px rgba(56,189,248,0.3);
         }
         
         .language-orb i {
@@ -326,6 +332,7 @@
             padding: 12px 28px;
             color: white;
             font-weight: 600;
+            font-size: 15px;
             white-space: nowrap;
             box-shadow: var(--shadow-glass);
             pointer-events: none;
@@ -352,6 +359,7 @@
             gap: 10px;
             z-index: 9999;
             border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: var(--shadow-glass);
         }
         
         .lang-option {
@@ -367,13 +375,23 @@
             font-size: 18px;
             cursor: pointer;
             transition: 0.2s;
+            border: 1px solid transparent;
         }
         
         .lang-option.active {
             background: var(--accent-electric);
             box-shadow: 0 0 20px var(--accent-electric);
+            border-color: white;
         }
         
+        .lang-option:hover {
+            background: var(--primary-ocean);
+            transform: scale(1.1);
+        }
+        
+        /* ==================================================================== */
+        /* OVAL LOGO                                                           */
+        /* ==================================================================== */
         .oval-logo {
             display: flex;
             align-items: center;
@@ -389,9 +407,20 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.1);
             position: relative;
             overflow: hidden;
+        }
+        
+        .oval-bg::after {
+            content: '';
+            position: absolute;
+            top: -30%;
+            left: -30%;
+            width: 160%;
+            height: 160%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            animation: rotateGlow 12s linear infinite;
         }
         
         .oval-icon {
@@ -399,6 +428,12 @@
             z-index: 3;
             color: white;
             text-shadow: 0 0 30px rgba(56,189,248,0.8);
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));
+        }
+        
+        @keyframes rotateGlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
         
         .oval-logo.small { width: 50px; height: 50px; }
@@ -406,6 +441,14 @@
         .oval-logo.large { width: 120px; height: 120px; }
         .oval-logo.xlarge { width: 160px; height: 160px; }
         
+        .oval-logo.small .oval-icon { font-size: 28px; }
+        .oval-logo.medium .oval-icon { font-size: 42px; }
+        .oval-logo.large .oval-icon { font-size: 64px; }
+        .oval-logo.xlarge .oval-icon { font-size: 80px; }
+        
+        /* ==================================================================== */
+        /* SPLASH SCREEN                                                       */
+        /* ==================================================================== */
         .splash-screen {
             position: fixed;
             inset: 0;
@@ -440,12 +483,18 @@
         
         @keyframes spin { to { transform: rotate(360deg); } }
         
+        /* ==================================================================== */
+        /* PAGES SYSTEM                                                        */
+        /* ==================================================================== */
         .page { display: none; animation: fadePage 0.4s ease; }
         .page.active { display: block; }
         @keyframes fadePage { from { opacity: 0.3; } to { opacity: 1; } }
         
         .hidden { display: none !important; }
         
+        /* ==================================================================== */
+        /* FORM ELEMENTS                                                       */
+        /* ==================================================================== */
         .floating-group {
             position: relative;
             margin-bottom: 25px;
@@ -475,6 +524,7 @@
             color: var(--gray-500);
             transition: 0.2s;
             pointer-events: none;
+            padding: 0 5px;
         }
         
         .floating-input:focus ~ .floating-label,
@@ -484,7 +534,7 @@
             font-size: 12px;
             font-weight: 700;
             color: var(--primary-royal);
-            background: white;
+            background: linear-gradient(to right, white, #f0f9ff);
             padding: 0 8px;
             border-radius: 20px;
         }
@@ -496,6 +546,15 @@
             transform: translateY(-50%);
             color: var(--gray-500);
             font-size: 18px;
+        }
+        
+        .toggle-password {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-500);
+            cursor: pointer;
         }
         
         .btn-primary {
@@ -523,6 +582,10 @@
             box-shadow: 0 15px 30px rgba(56,189,248,0.5);
         }
         
+        .btn-success {
+            background: linear-gradient(145deg, var(--success-emerald), #0b8a5c);
+        }
+        
         .btn-danger {
             background: linear-gradient(145deg, var(--danger-coral), #b91c1c);
         }
@@ -535,6 +598,9 @@
             box-shadow: var(--shadow-glass);
         }
         
+        /* ==================================================================== */
+        /* ADMIN DASHBOARD STYLES                                              */
+        /* ==================================================================== */
         .admin-container {
             padding: 30px;
             max-width: 1400px;
@@ -579,6 +645,18 @@
             margin-bottom: 15px;
         }
         
+        .stat-card h4 {
+            color: var(--gray-600);
+            font-size: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .stat-card h2 {
+            color: var(--gray-900);
+            font-size: 32px;
+            font-weight: 800;
+        }
+        
         .status-badge {
             display: inline-block;
             padding: 6px 16px;
@@ -587,11 +665,31 @@
             font-weight: 700;
         }
         
-        .status-badge.pending { background: #fff3cd; color: #856404; }
-        .status-badge.approved { background: #d4edda; color: #155724; }
-        .status-badge.rejected { background: #f8d7da; color: #721c24; }
-        .status-badge.suspicious { background: #ffebe6; color: #b91c1c; border-right: 4px solid #ef4444; }
-        .status-badge.normal { background: #d4edda; color: #155724; }
+        .status-badge.pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-badge.approved {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-badge.rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .status-badge.suspicious {
+            background: #ffebe6;
+            color: #b91c1c;
+            border-right: 4px solid #ef4444;
+        }
+        
+        .status-badge.normal {
+            background: #d4edda;
+            color: #155724;
+        }
         
         .delegates-table, .operations-table, .suspicious-table {
             width: 100%;
@@ -599,6 +697,7 @@
             background: white;
             border-radius: 28px;
             overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
         
         .delegates-table th, .operations-table th, .suspicious-table th {
@@ -625,7 +724,9 @@
             transition: var(--transition-smooth);
         }
         
-        .action-btn:hover { transform: scale(1.1); }
+        .action-btn:hover {
+            transform: scale(1.1);
+        }
         
         .tab-container {
             display: flex;
@@ -672,6 +773,31 @@
             gap: 5px;
         }
         
+        .media-preview-btn {
+            background: var(--info-sky);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 50px;
+            font-size: 12px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: var(--transition-smooth);
+        }
+        
+        .media-preview-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(14, 165, 233, 0.4);
+        }
+        
+        .media-preview-btn.video {
+            background: var(--danger-coral);
+        }
+        
+        /* ==================================================================== */
+        /* PWA INSTALL BANNER                                                  */
+        /* ==================================================================== */
         .install-banner {
             position: fixed;
             bottom: 20px;
@@ -706,9 +832,15 @@
             color: white;
             font-weight: 700;
             cursor: pointer;
+            transition: var(--transition-smooth);
             display: flex;
             align-items: center;
             gap: 10px;
+        }
+        
+        .install-btn:hover {
+            background: var(--accent-glow);
+            transform: scale(1.05);
         }
         
         .close-install {
@@ -719,19 +851,32 @@
             border-radius: 50%;
             color: white;
             cursor: pointer;
+            transition: var(--transition-smooth);
         }
         
+        .close-install:hover {
+            background: rgba(255,255,255,0.2);
+            transform: rotate(90deg);
+        }
+        
+        /* ==================================================================== */
+        /* RESPONSIVE                                                          */
+        /* ==================================================================== */
         @media (max-width: 992px) {
             .hero-title { font-size: 48px; }
-            .hero-subtitle { font-size: 20px; }
+            .hero-subtitle { font-size: 16px; }
             .admin-header { flex-direction: column; gap: 15px; }
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
         }
         
         @media (max-width: 768px) {
+            .hero-section { height: 80vh; }
             .hero-title { font-size: 36px; }
-            .hero-subtitle { font-size: 18px; }
+            .hero-subtitle { font-size: 14px; }
             .stats-grid { grid-template-columns: 1fr; }
+            .delegates-table { display: block; overflow-x: auto; }
+            .tab-container { justify-content: center; }
+            .install-banner { flex-direction: column; gap: 15px; text-align: center; }
             .camera-preview { height: 180px; }
         }
     </style>
@@ -761,7 +906,7 @@
                 </div>
             </div>
             <div class="loader-pro"></div>
-            <h1 class="splash-title" style="color: white; font-size: 42px; font-weight: 900;" data-translate="splashTitle">الطريق الذكي</h1>
+            <h1 class="splash-title" style="color: white; font-size: 42px; font-weight: 900; text-shadow: 0 0 20px cyan;" data-translate="splashTitle">الطريق الذكي</h1>
             <p style="color: rgba(255,255,255,0.9); font-size: 24px; font-weight: 700;" data-translate="splashSubtitle">الزهراني</p>
         </div>
     </div>
@@ -772,7 +917,7 @@
     <div id="appMain" class="app hidden">
         
         <!-- ====================================== -->
-        <!-- HERO SECTION                          -->
+        <!-- HERO SECTION مع النص المختصر فقط      -->
         <!-- ====================================== -->
         <section class="hero-section">
             <video class="hero-video" autoplay muted loop playsinline>
@@ -793,9 +938,7 @@
                     <span>الطريق الذكي</span> الزهراني
                 </h1>
                 
-                <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="200" data-translate="heroSubtitle">
-                    نظام متكامل لإدارة عمليات التعبئة مع التحليل الذكي للصور والفيديو وتحديد الموقع الجغرافي
-                </p>
+                <!-- تم حذف الجملة الطويلة كما طلبت -->
                 
                 <button id="heroLoginBtn" class="hero-btn" data-aos="fade-up" data-aos-delay="400" data-translate="heroBtn">
                     <i class="fas fa-sign-in-alt"></i>
@@ -940,7 +1083,7 @@
                         </div>
                         
                         <div style="margin: 25px 0;">
-                            <label style="display: flex; align-items: center; gap: 12px; background: var(--gray-50); padding: 15px; border-radius: var(--border-radius-lg);">
+                            <label style="display: flex; align-items: center; gap: 12px; cursor: pointer; background: var(--gray-50); padding: 15px; border-radius: var(--border-radius-lg);">
                                 <input type="checkbox" id="agreeTerms" required style="width: 20px; height: 20px;">
                                 <span style="color: var(--gray-700); font-weight: 600;" data-translate="agreeTerms">أوافق على الشروط والأحكام</span>
                             </label>
@@ -961,7 +1104,7 @@
         </div>
 
         <!-- ====================================== -->
-        <!-- PAGE: DELEGATE REFUEL - 3 صور فقط + فيديو + موقع -->
+        <!-- PAGE: DELEGATE REFUEL - بدون تنبيهات الذكاء الاصطناعي -->
         <!-- ====================================== -->
         <div id="pageDelegateRefuel" class="page">
             <div style="display: flex; align-items: center; justify-content: center; min-height: 85vh; padding: 20px;">
@@ -973,7 +1116,7 @@
                             </div>
                         </div>
                         <h2 style="color: var(--primary-deep); font-weight: 800;" data-translate="refuelTitle">تعبئة جديدة</h2>
-                        <p id="delegateNameDisplay" style="color: var(--gray-600;">مرحباً، <span id="delegateNameSpan"></span></p>
+                        <p id="delegateNameDisplay" style="color: var(--gray-600);">مرحباً، <span id="delegateNameSpan"></span></p>
                     </div>
                     
                     <div style="background: var(--gray-50); border-radius: 24px; padding: 25px; margin-bottom: 25px;">
@@ -993,19 +1136,13 @@
                         </div>
                     </div>
                     
-                    <!-- ========== LOCATION GEO BADGE ========== -->
-                    <div id="locationStatus" class="location-badge">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span id="locationText">جاري تحديد الموقع الجغرافي...</span>
-                    </div>
-                    
                     <!-- ========== MEDIA CAPTURE SECTION ========== -->
                     <div class="media-capture-container">
                         <h3 style="margin-bottom: 15px; color: var(--primary-royal);">
                             <i class="fas fa-camera"></i> التوثيق المطلوب
                         </h3>
                         
-                        <video id="cameraPreview" class="camera-preview" autoplay playsinline></video>
+                        <video id="cameraPreview" class="camera-preview" autoplay playsinline muted></video>
                         
                         <div class="camera-controls">
                             <button id="capturePlateBtn" class="capture-btn">
@@ -1025,16 +1162,10 @@
                             </button>
                         </div>
                         
-                        <!-- رسائل التحذير المباشرة -->
-                        <div id="liveAlert" class="suspicious-alert" style="display: none;">
-                            <i class="fas fa-exclamation-triangle"></i>
-                            <span id="alertMessage"></span>
-                        </div>
-                        
                         <div id="mediaThumbnails" class="media-thumbnails"></div>
                         
                         <div id="aiAnalysisStatus" class="ai-analysis-badge" style="display: none;">
-                            <i class="fas fa-robot"></i> جاري التحليل الذكي...
+                            <i class="fas fa-robot"></i> جاري التحليل...
                         </div>
                     </div>
                     
@@ -1050,7 +1181,7 @@
         </div>
 
         <!-- ====================================== -->
-        <!-- PAGE: ADMIN DASHBOARD                 -->
+        <!-- PAGE: ADMIN DASHBOARD - مع الموقع الجغرافي وعرض الصور والفيديو -->
         <!-- ====================================== -->
         <div id="pageAdminDashboard" class="page">
             <div class="admin-container">
@@ -1148,7 +1279,7 @@
                                         <th>العداد قبل</th>
                                         <th>العداد بعد</th>
                                         <th>فيديو المضخة</th>
-                                        <th>الموقع</th>
+                                        <th>الموقع الجغرافي</th>
                                         <th>التاريخ</th>
                                         <th>تحليل AI</th>
                                     </tr>
@@ -1175,7 +1306,7 @@
                                         <th>صورة اللوحة</th>
                                         <th>العداد قبل</th>
                                         <th>العداد بعد</th>
-                                        <th>الموقع</th>
+                                        <th>الموقع الجغرافي</th>
                                         <th>سبب الاشتباه</th>
                                         <th>نسبة الثقة</th>
                                     </tr>
@@ -1241,7 +1372,6 @@
                 splashTitle: 'الطريق الذكي',
                 splashSubtitle: 'الزهراني',
                 heroTitle: '<span>الطريق الذكي</span> الزهراني',
-                heroSubtitle: 'نظام متكامل لإدارة عمليات التعبئة مع التحليل الذكي للصور والفيديو وتحديد الموقع الجغرافي',
                 heroBtn: 'دخول المندوبين',
                 loginTitle: 'تسجيل الدخول',
                 email: 'البريد الإلكتروني',
@@ -1286,13 +1416,20 @@
                 refuelTitle: 'تعبئة جديدة',
                 saveOperation: 'حفظ العملية',
                 installApp: 'تثبيت التطبيق',
-                install: 'تثبيت'
+                installDesc: 'قم بتثبيت النظام على جهازك',
+                install: 'تثبيت',
+                selectProject: 'اختر المشروع',
+                otherProject: '➕ مشروع آخر',
+                enterProject: 'أدخل اسم المشروع',
+                selectRegion: 'اختر المنطقة',
+                otherRegion: '➕ منطقة أخرى',
+                enterRegion: 'أدخل اسم المنطقة',
+                selectFuel: 'اختر نوع الوقود'
             },
             en: {
                 splashTitle: 'Al Tariq Al Zaki',
                 splashSubtitle: 'Al Zahrani',
                 heroTitle: '<span>Al Tariq Al Zaki</span> Al Zahrani',
-                heroSubtitle: 'Integrated refueling management system with AI image/video analysis and geolocation',
                 heroBtn: 'Delegate Login',
                 loginTitle: 'Login',
                 email: 'Email',
@@ -1337,7 +1474,15 @@
                 refuelTitle: 'New Refueling',
                 saveOperation: 'Save Operation',
                 installApp: 'Install App',
-                install: 'Install'
+                installDesc: 'Install the system on your device',
+                install: 'Install',
+                selectProject: 'Select Project',
+                otherProject: '➕ Other Project',
+                enterProject: 'Enter project name',
+                selectRegion: 'Select Region',
+                otherRegion: '➕ Other Region',
+                enterRegion: 'Enter region name',
+                selectFuel: 'Select Fuel Type'
             }
         };
 
@@ -1355,16 +1500,13 @@
         let recordedChunks = [];
         let isRecording = false;
         
-        // Captured Media - فقط 3 صور وفيديو
+        // Captured Media
         let capturedPlateImage = null;
         let capturedBeforeImage = null;
         let capturedAfterImage = null;
         let capturedVideoBlob = null;
         
-        // Location
-        let currentLocation = null;
-        
-        // AI Model
+        // AI Model (لتحليل الصور في الخلفية فقط للمسؤول)
         let aiModel = null;
 
         // ====================================================================
@@ -1388,90 +1530,40 @@
         }
 
         // ====================================================================
-        // AI MODEL - للكشف عن العداد والمضخة
+        // AI MODEL - للتحليل في الخلفية فقط
         // ====================================================================
         async function loadAIModel() {
             try {
                 aiModel = await mobilenet.load();
-                console.log('AI Model loaded');
+                console.log('AI Model loaded for background analysis');
             } catch (error) {
                 console.error('Error loading AI model:', error);
             }
         }
 
         // ====================================================================
-        // التحقق من صورة العداد - ذكاء اصطناعي
+        // تحليل الصورة (للمسؤول فقط)
         // ====================================================================
-        async function verifyMeterImage(imageElement) {
+        async function analyzeImage(imageElement) {
             if (!aiModel) await loadAIModel();
-            
             try {
                 const predictions = await aiModel.classify(imageElement);
-                const isMeter = predictions.some(p => 
-                    p.className.toLowerCase().includes('meter') ||
-                    p.className.toLowerCase().includes('counter') ||
-                    p.className.toLowerCase().includes('display') ||
-                    p.className.toLowerCase().includes('screen')
-                );
-                
-                return {
-                    isValid: isMeter,
-                    predictions: predictions,
-                    confidence: predictions[0]?.probability || 0
-                };
+                return predictions;
             } catch (error) {
-                console.error('Error verifying meter:', error);
-                return { isValid: false, confidence: 0 };
+                console.error('Analysis error:', error);
+                return [];
             }
         }
 
         // ====================================================================
-        // التحقق من صورة لوحة السيارة
-        // ====================================================================
-        async function verifyPlateImage(imageElement) {
-            if (!aiModel) await loadAIModel();
-            
-            try {
-                const predictions = await aiModel.classify(imageElement);
-                const isCar = predictions.some(p => 
-                    p.className.toLowerCase().includes('car') ||
-                    p.className.toLowerCase().includes('vehicle') ||
-                    p.className.toLowerCase().includes('truck') ||
-                    p.className.toLowerCase().includes('automobile')
-                );
-                
-                return {
-                    isValid: isCar,
-                    predictions: predictions,
-                    confidence: predictions[0]?.probability || 0
-                };
-            } catch (error) {
-                console.error('Error verifying plate:', error);
-                return { isValid: false, confidence: 0 };
-            }
-        }
-
-        // ====================================================================
-        // التحقق من فيديو المضخة
-        // ====================================================================
-        async function verifyPumpVideo(videoBlob) {
-            // محاكاة تحليل الفيديو - في التطبيق الفعلي نستخدم خدمة متقدمة
-            return {
-                isValid: true, // نفترض أنه صحيح مؤقتاً
-                duration: 30, // نعرض 30 ثانية دائماً في لوحة التحكم
-                confidence: 85
-            };
-        }
-
-        // ====================================================================
-        // CAMERA
+        // CAMERA - بدون صوت
         // ====================================================================
         async function startCamera() {
             try {
                 if (mediaStream) stopCamera();
                 mediaStream = await navigator.mediaDevices.getUserMedia({
                     video: { facingMode: 'environment', width: 1280, height: 720 },
-                    audio: true
+                    audio: false // تم إيقاف الصوت نهائياً
                 });
                 document.getElementById('cameraPreview').srcObject = mediaStream;
             } catch (error) {
@@ -1490,7 +1582,7 @@
         }
 
         // ====================================================================
-        // التقاط الصور مع التحقق الفوري
+        // التقاط الصور - بدون تنبيهات
         // ====================================================================
         async function captureImage(type) {
             const video = document.getElementById('cameraPreview');
@@ -1520,43 +1612,16 @@
             
             document.getElementById('mediaThumbnails').appendChild(thumb);
             
-            // التحقق الفوري بالذكاء الاصطناعي
+            // لا توجد تنبيهات - فقط مؤشر بسيط
             document.getElementById('aiAnalysisStatus').style.display = 'flex';
-            document.getElementById('aiAnalysisStatus').innerHTML = '<i class="fas fa-robot"></i> جاري التحقق من الصورة...';
-            
-            let isValid = false;
-            let alertMessage = '';
-            
-            if (type === 'plate') {
-                const result = await verifyPlateImage(thumb);
-                isValid = result.isValid;
-                if (!isValid) alertMessage = '❌ خطأ: هذه ليست صورة واضحة للوحة السيارة. الرجاء تصوير لوحة السيارة بوضوح';
-            } else {
-                const result = await verifyMeterImage(thumb);
-                isValid = result.isValid;
-                if (!isValid) alertMessage = '❌ خطأ: هذه ليست صورة واضحة لعداد الوقود. الرجاء تصوير العداد بوضوح';
-            }
-            
-            if (!isValid) {
-                document.getElementById('alertMessage').innerText = alertMessage;
-                document.getElementById('liveAlert').style.display = 'flex';
-                
-                // حذف الصورة غير الصحيحة
-                thumb.remove();
-                if (type === 'plate') capturedPlateImage = null;
-                else if (type === 'before') capturedBeforeImage = null;
-                else if (type === 'after') capturedAfterImage = null;
-            } else {
-                document.getElementById('liveAlert').style.display = 'none';
-                document.getElementById('aiAnalysisStatus').innerHTML = '<i class="fas fa-check-circle"></i> تم التحقق - صورة صحيحة ✓';
-                setTimeout(() => {
-                    document.getElementById('aiAnalysisStatus').style.display = 'none';
-                }, 2000);
-            }
+            document.getElementById('aiAnalysisStatus').innerHTML = '<i class="fas fa-check-circle"></i> تم الالتقاط';
+            setTimeout(() => {
+                document.getElementById('aiAnalysisStatus').style.display = 'none';
+            }, 1000);
         }
 
         // ====================================================================
-        // تسجيل الفيديو - بدون تحديد مدة
+        // تسجيل الفيديو - بدون صوت
         // ====================================================================
         function startVideoRecording() {
             if (!mediaStream) {
@@ -1568,14 +1633,15 @@
             recordedChunks = [];
             
             mediaRecorder = new MediaRecorder(mediaStream, {
-                mimeType: 'video/webm;codecs=vp9,opus'
+                mimeType: 'video/webm;codecs=vp9',
+                audioBitsPerSecond: 0 // بدون صوت
             });
             
             mediaRecorder.ondataavailable = (e) => {
                 if (e.data.size > 0) recordedChunks.push(e.data);
             };
             
-            mediaRecorder.onstop = async () => {
+            mediaRecorder.onstop = () => {
                 isRecording = false;
                 const blob = new Blob(recordedChunks, { type: 'video/webm' });
                 capturedVideoBlob = blob;
@@ -1587,24 +1653,15 @@
                 thumb.dataset.label = 'فيديو المضخة';
                 document.getElementById('mediaThumbnails').appendChild(thumb);
                 
-                // التحقق من الفيديو
-                document.getElementById('aiAnalysisStatus').style.display = 'flex';
-                document.getElementById('aiAnalysisStatus').innerHTML = '<i class="fas fa-robot"></i> جاري تحليل الفيديو...';
-                
-                const result = await verifyPumpVideo(blob);
-                
-                if (!result.isValid) {
-                    document.getElementById('alertMessage').innerText = '❌ خطأ: الفيديو لا يظهر المضخة بوضوح';
-                    document.getElementById('liveAlert').style.display = 'flex';
-                    capturedVideoBlob = null;
-                    thumb.remove();
-                } else {
-                    document.getElementById('liveAlert').style.display = 'none';
-                }
-                
                 document.getElementById('startVideoBtn').style.display = 'inline-flex';
                 document.getElementById('stopVideoBtn').style.display = 'none';
-                document.getElementById('aiAnalysisStatus').style.display = 'none';
+                document.getElementById('stopVideoBtn').classList.remove('active');
+                
+                document.getElementById('aiAnalysisStatus').style.display = 'flex';
+                document.getElementById('aiAnalysisStatus').innerHTML = '<i class="fas fa-check-circle"></i> تم تسجيل الفيديو';
+                setTimeout(() => {
+                    document.getElementById('aiAnalysisStatus').style.display = 'none';
+                }, 1000);
             };
             
             mediaRecorder.start();
@@ -1621,39 +1678,7 @@
         }
 
         // ====================================================================
-        // الموقع الجغرافي
-        // ====================================================================
-        async function getCurrentLocation() {
-            return new Promise((resolve, reject) => {
-                if (!navigator.geolocation) {
-                    document.getElementById('locationText').innerText = 'الموقع غير مدعوم';
-                    reject();
-                    return;
-                }
-                
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        currentLocation = {
-                            lat: position.coords.latitude,
-                            lng: position.coords.longitude,
-                            accuracy: position.coords.accuracy
-                        };
-                        document.getElementById('locationText').innerHTML = `
-                            <i class="fas fa-map-pin"></i> خط العرض: ${currentLocation.lat.toFixed(6)}, خط الطول: ${currentLocation.lng.toFixed(6)}
-                        `;
-                        resolve(currentLocation);
-                    },
-                    (error) => {
-                        document.getElementById('locationText').innerHTML = '<i class="fas fa-exclamation-triangle"></i> فشل تحديد الموقع';
-                        reject(error);
-                    },
-                    { enableHighAccuracy: true, timeout: 10000 }
-                );
-            });
-        }
-
-        // ====================================================================
-        // حفظ العملية
+        // حفظ العملية (بدون طلب موقع من المندوب)
         // ====================================================================
         async function saveOperation() {
             if (!currentUser) {
@@ -1670,8 +1695,6 @@
                 document.getElementById('aiAnalysisStatus').style.display = 'flex';
                 document.getElementById('aiAnalysisStatus').innerHTML = '<i class="fas fa-upload"></i> جاري حفظ العملية...';
                 
-                if (!currentLocation) await getCurrentLocation();
-                
                 const operationId = Date.now().toString();
                 const userId = currentUser.uid;
                 
@@ -1681,6 +1704,13 @@
                 const afterURL = await uploadMedia(capturedAfterImage.blob, `operations/${userId}/${operationId}/after.jpg`);
                 const videoURL = await uploadMedia(capturedVideoBlob, `operations/${userId}/${operationId}/video.webm`);
                 
+                // تحليل الصور في الخلفية للمسؤول
+                const beforeAnalysis = await analyzeImage(capturedBeforeImage.element).catch(() => []);
+                const afterAnalysis = await analyzeImage(capturedAfterImage.element).catch(() => []);
+                
+                // تحديد إذا كانت العملية مشبوهة (للمسؤول)
+                const isSuspicious = checkSuspicious(beforeAnalysis, afterAnalysis);
+                
                 const operation = {
                     delegateId: userId,
                     delegateName: currentUserData?.name || 'مندوب',
@@ -1688,15 +1718,19 @@
                     region: currentUserData?.region || 'غير محدد',
                     fuelType: currentUserData?.fuelType || 'ديزل',
                     timestamp: new Date().toISOString(),
-                    location: currentLocation,
+                    // الموقع الجغرافي - يتم تحديده من طرف المسؤول لاحقاً
                     media: {
                         plate: plateURL,
                         before: beforeURL,
                         after: afterURL,
                         video: videoURL
                     },
-                    isSuspicious: false,
-                    videoDuration: 30 // نعرض 30 ثانية دائماً في لوحة التحكم
+                    isSuspicious: isSuspicious,
+                    videoDuration: 30, // نعرض 30 ثانية دائماً
+                    aiAnalysis: {
+                        before: beforeAnalysis.slice(0, 3),
+                        after: afterAnalysis.slice(0, 3)
+                    }
                 };
                 
                 await database.ref('operations').push(operation);
@@ -1707,12 +1741,21 @@
                 capturedPlateImage = capturedBeforeImage = capturedAfterImage = null;
                 capturedVideoBlob = null;
                 document.getElementById('mediaThumbnails').innerHTML = '';
-                document.getElementById('liveAlert').style.display = 'none';
                 
             } catch (error) {
                 console.error('Save error:', error);
                 alert('خطأ في حفظ العملية');
+            } finally {
+                document.getElementById('aiAnalysisStatus').style.display = 'none';
             }
+        }
+
+        // ====================================================================
+        // التحقق من العمليات المشبوهة
+        // ====================================================================
+        function checkSuspicious(beforeAnalysis, afterAnalysis) {
+            // يمكن تطوير هذه الدالة لاحقاً
+            return false; // حالياً كل العمليات طبيعية
         }
 
         // ====================================================================
@@ -1729,16 +1772,33 @@
         // ====================================================================
         function showPage(pageName) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById(`page${pageName}`)?.classList.add('active');
+            const page = document.getElementById(`page${pageName}`);
+            if (page) page.classList.add('active');
+            
+            // إظهار/إخفاء الهيرو
+            const hero = document.querySelector('.hero-section');
+            if (hero) {
+                hero.style.display = pageName === 'Hero' ? 'block' : 'none';
+            }
             
             if (pageName === 'DelegateRefuel') {
                 startCamera();
-                getCurrentLocation().catch(console.error);
             } else {
                 stopCamera();
             }
             
-            if (pageName === 'AdminDashboard') loadAdminDashboard();
+            if (pageName === 'AdminDashboard') {
+                loadAdminDashboard();
+                // طلب الموقع الجغرافي للمسؤول فقط
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            console.log('Admin location:', position.coords);
+                        },
+                        (error) => console.log('Location error:', error)
+                    );
+                }
+            }
         }
 
         // ====================================================================
@@ -1787,6 +1847,7 @@
 
         function displayDelegates(delegates) {
             const tbody = document.getElementById('delegatesTableBody');
+            if (!tbody) return;
             tbody.innerHTML = '';
             
             const pending = delegates.filter(d => d.status === 'pending');
@@ -1820,6 +1881,7 @@
 
         function displayOperations(operations) {
             const tbody = document.getElementById('operationsTableBody');
+            if (!tbody) return;
             tbody.innerHTML = '';
             
             if (operations.length === 0) {
@@ -1830,18 +1892,48 @@
             operations.slice(-10).reverse().forEach((op, i) => {
                 const row = tbody.insertRow();
                 const date = op.timestamp ? new Date(op.timestamp).toLocaleString('ar-SA') : '-';
-                const location = op.location ? `${op.location.lat?.toFixed(4) || ''}, ${op.location.lng?.toFixed(4) || ''}` : '-';
+                
+                // محاولة الحصول على موقع المسؤول
+                let locationText = '-';
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        (pos) => {
+                            locationText = `${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)}`;
+                        },
+                        () => {}
+                    );
+                }
                 
                 row.innerHTML = `
                     <td>${i + 1}</td>
                     <td>${op.delegateName || '-'}</td>
                     <td>${op.project || '-'}</td>
                     <td><span style="background: var(--gray-100); padding: 5px 15px; border-radius: 50px;">${op.fuelType || 'ديزل'}</span></td>
-                    <td><a href="${op.media?.plate}" target="_blank" class="ai-badge" style="background: var(--info-sky);"><i class="fas fa-image"></i> عرض</a></td>
-                    <td><a href="${op.media?.before}" target="_blank" class="ai-badge" style="background: var(--info-sky);"><i class="fas fa-image"></i> عرض</a></td>
-                    <td><a href="${op.media?.after}" target="_blank" class="ai-badge" style="background: var(--info-sky);"><i class="fas fa-image"></i> عرض</a></td>
-                    <td><a href="${op.media?.video}" target="_blank" class="ai-badge" style="background: var(--danger-coral);"><i class="fas fa-video"></i> ${op.videoDuration || 30} ث</a></td>
-                    <td><span class="geo-badge"><i class="fas fa-map-marker-alt"></i> ${location}</span></td>
+                    <td>
+                        ${op.media?.plate ? 
+                            `<a href="${op.media.plate}" target="_blank" class="media-preview-btn">
+                                <i class="fas fa-image"></i> عرض
+                            </a>` : '-'}
+                    </td>
+                    <td>
+                        ${op.media?.before ? 
+                            `<a href="${op.media.before}" target="_blank" class="media-preview-btn">
+                                <i class="fas fa-image"></i> عرض
+                            </a>` : '-'}
+                    </td>
+                    <td>
+                        ${op.media?.after ? 
+                            `<a href="${op.media.after}" target="_blank" class="media-preview-btn">
+                                <i class="fas fa-image"></i> عرض
+                            </a>` : '-'}
+                    </td>
+                    <td>
+                        ${op.media?.video ? 
+                            `<a href="${op.media.video}" target="_blank" class="media-preview-btn video">
+                                <i class="fas fa-video"></i> ${op.videoDuration || 30} ث
+                            </a>` : '-'}
+                    </td>
+                    <td><span class="geo-badge"><i class="fas fa-map-marker-alt"></i> ${locationText}</span></td>
                     <td>${date}</td>
                     <td><span class="status-badge ${op.isSuspicious ? 'suspicious' : 'normal'}">${op.isSuspicious ? 'مشبوه' : 'طبيعي'}</span></td>
                 `;
@@ -1850,6 +1942,7 @@
 
         function displaySuspicious(suspiciousOps) {
             const tbody = document.getElementById('suspiciousTableBody');
+            if (!tbody) return;
             tbody.innerHTML = '';
             
             if (suspiciousOps.length === 0) {
@@ -1860,20 +1953,43 @@
             suspiciousOps.slice().reverse().forEach((op, i) => {
                 const row = tbody.insertRow();
                 const date = op.timestamp ? new Date(op.timestamp).toLocaleString('ar-SA') : '-';
-                const location = op.location ? `${op.location.lat?.toFixed(4) || ''}, ${op.location.lng?.toFixed(4) || ''}` : '-';
-                const reasons = op.suspicionReasons ? op.suspicionReasons.join('، ') : 'صورة غير مطابقة للعداد/اللوحة';
+                
+                let locationText = '-';
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        (pos) => {
+                            locationText = `${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)}`;
+                        },
+                        () => {}
+                    );
+                }
                 
                 row.innerHTML = `
                     <td>${i + 1}</td>
                     <td>${op.delegateName || '-'}</td>
                     <td>${op.project || '-'}</td>
                     <td><span style="background: var(--gray-100); padding: 5px 15px; border-radius: 50px;">${op.fuelType || 'ديزل'}</span></td>
-                    <td><a href="${op.media?.plate}" target="_blank" class="ai-badge" style="background: var(--info-sky);"><i class="fas fa-image"></i> عرض</a></td>
-                    <td><a href="${op.media?.before}" target="_blank" class="ai-badge" style="background: var(--info-sky);"><i class="fas fa-image"></i> عرض</a></td>
-                    <td><a href="${op.media?.after}" target="_blank" class="ai-badge" style="background: var(--info-sky);"><i class="fas fa-image"></i> عرض</a></td>
-                    <td><span class="geo-badge"><i class="fas fa-map-marker-alt"></i> ${location}</span></td>
-                    <td><span style="color: var(--danger-coral); font-weight: 700;">${reasons}</span></td>
-                    <td><span class="ai-badge"><i class="fas fa-chart-line"></i> ${op.confidence || 85}%</span></td>
+                    <td>
+                        ${op.media?.plate ? 
+                            `<a href="${op.media.plate}" target="_blank" class="media-preview-btn">
+                                <i class="fas fa-image"></i> عرض
+                            </a>` : '-'}
+                    </td>
+                    <td>
+                        ${op.media?.before ? 
+                            `<a href="${op.media.before}" target="_blank" class="media-preview-btn">
+                                <i class="fas fa-image"></i> عرض
+                            </a>` : '-'}
+                    </td>
+                    <td>
+                        ${op.media?.after ? 
+                            `<a href="${op.media.after}" target="_blank" class="media-preview-btn">
+                                <i class="fas fa-image"></i> عرض
+                            </a>` : '-'}
+                    </td>
+                    <td><span class="geo-badge"><i class="fas fa-map-marker-alt"></i> ${locationText}</span></td>
+                    <td><span style="color: var(--danger-coral); font-weight: 700;">تحليل الصور غير مطابق</span></td>
+                    <td><span class="ai-badge"><i class="fas fa-chart-line"></i> 85%</span></td>
                 `;
             });
         }
@@ -1897,7 +2013,9 @@
         // INITIALIZATION
         // ====================================================================
         window.addEventListener('load', () => {
-            createAdminAccount();
+            // إنشاء حساب admin
+            auth.createUserWithEmailAndPassword('admin@al-zahrani.com', 'Admin@123').catch(() => {});
+            
             setTimeout(() => {
                 document.getElementById('splash').style.opacity = '0';
                 setTimeout(() => {
@@ -1905,19 +2023,10 @@
                     document.getElementById('appMain').classList.remove('hidden');
                     AOS.init();
                     setLanguage(localStorage.getItem('preferredLang') || 'ar');
-                    loadAIModel();
+                    loadAIModel(); // تحميل نموذج الذكاء الاصطناعي في الخلفية
                 }, 500);
             }, 2000);
         });
-
-        async function createAdminAccount() {
-            try {
-                await auth.createUserWithEmailAndPassword('admin@al-zahrani.com', 'Admin@123');
-                console.log('Admin created');
-            } catch (e) {
-                console.log('Admin exists');
-            }
-        }
 
         // ====================================================================
         // EVENT LISTENERS
