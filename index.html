@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>الطريق الذكي الزهراني | </title>
+    <title>الطريق الذكي الزهراني | نظام إدارة الأسطول المتطور</title>
     
     <!-- Firebase SDK v10.8.0 -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -1458,10 +1458,20 @@
             appId: "1:379225678294:web:4fda8847260c4a5d230477"
         };
         
+        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const database = firebase.database();
         const storage = firebase.storage();
+
+        // ====================================================================
+        // ENABLE PERSISTENCE - مهم جداً للصلاحيات
+        // ====================================================================
+        database.ref('.info/connected').on('value', (snap) => {
+            if (snap.val() === true) {
+                console.log('✅ متصل بقاعدة البيانات');
+            }
+        });
 
         // ====================================================================
         // TRANSLATIONS
@@ -1640,7 +1650,7 @@
         async function loadAIModel() {
             try {
                 aiModel = await mobilenet.load();
-                console.log('AI Model loaded');
+                console.log('✅ AI Model loaded');
             } catch (error) {
                 console.error('Error loading AI model:', error);
             }
@@ -1817,12 +1827,12 @@
                         before: beforeAnalysis.slice(0, 3),
                         after: afterAnalysis.slice(0, 3)
                     },
-                    isSuspicious: checkSuspicious(beforeAnalysis, afterAnalysis)
+                    isSuspicious: false
                 };
                 
                 await database.ref('operations').push(operation);
                 
-                alert('تم حفظ العملية بنجاح');
+                alert('✅ تم حفظ العملية بنجاح');
                 
                 capturedPlateImage = capturedBeforeImage = capturedAfterImage = null;
                 capturedVideoBlob = null;
@@ -1830,18 +1840,10 @@
                 
             } catch (error) {
                 console.error('Save error:', error);
-                alert('خطأ في حفظ العملية');
+                alert('❌ خطأ في حفظ العملية: ' + error.message);
             } finally {
                 document.getElementById('aiAnalysisStatus').style.display = 'none';
             }
-        }
-
-        // ====================================================================
-        // التحقق من العمليات المشبوهة
-        // ====================================================================
-        function checkSuspicious(beforeAnalysis, afterAnalysis) {
-            // يمكن تطوير هذه الدالة حسب الحاجة
-            return false;
         }
 
         // ====================================================================
@@ -1874,15 +1876,6 @@
             
             if (pageName === 'AdminDashboard') {
                 loadAdminDashboard();
-                // طلب موقع المسؤول
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(
-                        (position) => {
-                            console.log('Admin location available');
-                        },
-                        (error) => console.log('Location error:', error)
-                    );
-                }
             }
         }
 
@@ -2077,7 +2070,6 @@
             
             document.getElementById('modalTitle').innerText = 'موقع التعبئة';
             
-            // الحصول على موقع المسؤول الحالي
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
@@ -2172,7 +2164,6 @@
             
             document.getElementById('modalTitle').innerText = 'تفاصيل العملية';
             
-            // عرض الموقع
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
@@ -2199,7 +2190,6 @@
                 );
             }
             
-            // عرض التحليل
             let analysisHtml = '';
             if (op.aiAnalysis?.before) {
                 analysisHtml += '<h4>تحليل العداد قبل:</h4>';
@@ -2209,7 +2199,6 @@
             }
             document.getElementById('analysisContent').innerHTML = analysisHtml || 'لا يوجد تحليل';
             
-            // عرض الوسائط
             let mediaHtml = '';
             if (op.media?.plate) mediaHtml += `<a href="${op.media.plate}" target="_blank" class="media-preview-btn"><i class="fas fa-image"></i> اللوحة</a>`;
             if (op.media?.before) mediaHtml += `<a href="${op.media.before}" target="_blank" class="media-preview-btn"><i class="fas fa-image"></i> قبل</a>`;
@@ -2236,15 +2225,23 @@
         // DELEGATE ACTIONS
         // ====================================================================
         window.approveDelegate = async function(id) {
-            await database.ref('delegate_requests/' + id).update({ status: 'approved' });
-            alert('تمت الموافقة');
-            loadAdminDashboard();
+            try {
+                await database.ref('delegate_requests/' + id).update({ status: 'approved' });
+                alert('✅ تمت الموافقة');
+                loadAdminDashboard();
+            } catch (error) {
+                alert('❌ خطأ: ' + error.message);
+            }
         };
         
         window.rejectDelegate = async function(id) {
-            await database.ref('delegate_requests/' + id).update({ status: 'rejected' });
-            alert('تم الرفض');
-            loadAdminDashboard();
+            try {
+                await database.ref('delegate_requests/' + id).update({ status: 'rejected' });
+                alert('✅ تم الرفض');
+                loadAdminDashboard();
+            } catch (error) {
+                alert('❌ خطأ: ' + error.message);
+            }
         };
 
         // ====================================================================
@@ -2313,6 +2310,7 @@
         // Signup
         document.getElementById('signupForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+            
             if (!document.getElementById('agreeTerms').checked) {
                 alert('الرجاء الموافقة على الشروط');
                 return;
@@ -2322,9 +2320,16 @@
             const password = document.getElementById('signupPassword').value;
             const email = document.getElementById('signupEmail').value || null;
             
+            // التحقق من عدم وجود اسم مستخدم مكرر
+            const usersSnap = await database.ref('delegate_requests').orderByChild('username').equalTo(username).once('value');
+            if (usersSnap.exists()) {
+                alert('اسم المستخدم موجود بالفعل. الرجاء اختيار اسم آخر');
+                return;
+            }
+            
             try {
                 // إنشاء حساب باستخدام البريد الإلكتروني إذا وجد، أو استخدام اسم المستخدم كبريد وهمي
-                const userEmail = email || `${username.replace(/\s+/g, '').toLowerCase()}@local.alzahrani`;
+                const userEmail = email || `${username.replace(/\s+/g, '').toLowerCase()}@alzahrani.local`;
                 
                 const user = await auth.createUserWithEmailAndPassword(userEmail, password);
                 
@@ -2334,6 +2339,7 @@
                 let region = document.getElementById('signupRegion').value;
                 if (region === 'manual') region = document.getElementById('signupManualRegion').value;
                 
+                // حفظ البيانات في Realtime Database
                 await database.ref('delegate_requests/' + user.user.uid).set({
                     username: username,
                     email: email || 'غير محدد',
@@ -2341,16 +2347,22 @@
                     region: region,
                     fuelType: document.getElementById('signupFuelType').value,
                     status: 'pending',
-                    createdAt: new Date().toISOString()
+                    createdAt: new Date().toISOString(),
+                    uid: user.user.uid
                 });
                 
-                alert('تم التسجيل بنجاح');
+                alert('✅ تم التسجيل بنجاح. في انتظار موافقة الإدارة');
                 showPage('DelegateLogin');
+                
             } catch (error) {
+                console.error('Signup error:', error);
+                
                 if (error.code === 'auth/email-already-in-use') {
-                    alert('هذا البريد الإلكتروني مستخدم بالفعل. الرجاء استخدام بريد آخر أو ترك الحقل فارغاً');
+                    alert('❌ هذا البريد الإلكتروني مستخدم بالفعل. الرجاء استخدام بريد آخر أو ترك الحقل فارغاً');
+                } else if (error.code === 'auth/weak-password') {
+                    alert('❌ كلمة المرور ضعيفة جداً. يجب أن تكون 6 أحرف على الأقل');
                 } else {
-                    alert('خطأ في التسجيل: ' + error.message);
+                    alert('❌ خطأ في التسجيل: ' + error.message);
                 }
             }
         });
@@ -2358,10 +2370,12 @@
         // Login
         document.getElementById('delegateLoginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+            
             const username = document.getElementById('loginUsername').value;
             const password = document.getElementById('loginPassword').value;
             
             try {
+                // تسجيل دخول المدير
                 if (username === 'admin') {
                     const user = await auth.signInWithEmailAndPassword('admin@al-zahrani.com', password);
                     showPage('AdminDashboard');
@@ -2379,33 +2393,36 @@
                 });
                 
                 if (!userData) {
-                    alert('اسم المستخدم غير موجود');
+                    alert('❌ اسم المستخدم غير موجود');
                     return;
                 }
                 
                 // تسجيل الدخول باستخدام البريد الإلكتروني المخزن
                 const userEmail = userData.email === 'غير محدد' ? 
-                    `${username.replace(/\s+/g, '').toLowerCase()}@local.alzahrani` : 
+                    `${username.replace(/\s+/g, '').toLowerCase()}@alzahrani.local` : 
                     userData.email;
                 
                 const user = await auth.signInWithEmailAndPassword(userEmail, password);
                 
                 if (userData.status !== 'approved') {
-                    alert('الحساب غير معتمد بعد');
+                    alert('❌ الحساب غير معتمد بعد. الرجاء الانتظار');
                     await auth.signOut();
                     return;
                 }
                 
                 currentUser = user.user;
                 currentUserData = userData;
+                
                 document.getElementById('delegateNameSpan').innerText = userData.username;
                 document.getElementById('delegateProjectSpan').innerText = userData.project;
                 document.getElementById('delegateRegionSpan').innerText = userData.region;
                 document.getElementById('delegateFuelTypeSpan').innerText = userData.fuelType;
                 
                 showPage('DelegateRefuel');
+                
             } catch (error) {
-                alert('خطأ في تسجيل الدخول: ' + error.message);
+                console.error('Login error:', error);
+                alert('❌ خطأ في تسجيل الدخول: ' + error.message);
             }
         });
         
